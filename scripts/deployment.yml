@@ -1,1 +1,75 @@
-# Your Solution
+# Kubernetes Deployment for book_catalog microservice
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book-catalog
+  template:
+    metadata:
+      labels:
+        app: book-catalog
+    spec:
+      containers:
+        - name: book-catalog
+          image: sit722week77.azurecr.io/book-catalog:8
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              value: postgresql://database_url_9lr6_user:YEu0XfyJbD5s9wojs5F3kCCye7Rpr40V@dpg-crkif1btq21c73da4ncg-a.oregon-postgres.render.com/database_url_9lr6
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-catalog
+spec:
+  selector:
+    app: book-catalog
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+# Kubernetes Deployment for inventory_management microservice
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-management
+  template:
+    metadata:
+      labels:
+        app: inventory-management
+    spec:
+      containers:
+        - name: inventory-management
+          image: sit722week77.azurecr.io/inventory-management:8
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              value: postgresql://database_url_9lr6_user:YEu0XfyJbD5s9wojs5F3kCCye7Rpr40V@dpg-crkif1btq21c73da4ncg-a.oregon-postgres.render.com/database_url_9lr6
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-management
+spec:
+  selector:
+    app: inventory-management
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000

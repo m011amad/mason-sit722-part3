@@ -1,1 +1,34 @@
-# Your Solution
+version: "3.8"
+
+services:
+  book_catalog:
+    image: book-catalog:4
+    build:
+      context: ./book_catalog
+      dockerfile: Dockerfile
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
+    environment:
+      - DATABASE_URL=postgresql://database_url_9lr6_user:YEu0XfyJbD5s9wojs5F3kCCye7Rpr40V@dpg-crkif1btq21c73da4ncg-a.oregon-postgres.render.com/database_url_9lr6
+    volumes:
+      - ./book_catalog:/app
+    ports:
+      - "8000:8000"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+  inventory_management:
+    image: inventory-management:4
+    build:
+      context: ./inventory_management
+      dockerfile: Dockerfile
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
+    environment:
+      - DATABASE_URL=postgresql://database_url_9lr6_user:YEu0XfyJbD5s9wojs5F3kCCye7Rpr40V@dpg-crkif1btq21c73da4ncg-a.oregon-postgres.render.com/database_url_9lr6
+    volumes:
+      - ./inventory_management:/app
+    ports:
+      - "8001:8000"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
